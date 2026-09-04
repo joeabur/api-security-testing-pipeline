@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: api_security
+      POSTGRES_USER: api_security
+      POSTGRES_PASSWORD: change-me-in-local-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U api_security -d api_security"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://api_security:change-me-in-local-only@db:5432/api_security
+      JWT_SECRET: local-development-only-change-me-to-a-random-secret
+      CORS_ORIGINS: http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+
+volumes:
+  postgres-data:
