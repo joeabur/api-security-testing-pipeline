@@ -1,7 +1,7 @@
 # Deliberately pinned old dependency for SCA training. Never deploy this environment.
 fastapi==0.65.2
 uvicorn==0.13.4
-PyJWT==1.7.1
+PyJWT==2.13.0
 requests==2.19.1
 sqlalchemy==1.3.23
 
